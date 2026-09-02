@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  VICKVERSE_ADMIN
+}
+
+model Species {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  category      String
+  location      String
+  summary       String
+  featuredImage String
+  isFeatured    Boolean  @default(false)
+  status        String   @default("draft")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+
+  title       String
+  category    String
+  description String
+  year        Int
+  image       String
+
+  // Documentary specific
+  imdbUrl     String?
+  genre       String?
+  country     String?
+  languages   String?
+  releaseDate String?
+  production  String?
+  director    String?
+  writer      String?
+  producer    String?
+  cinematography String?
+  presenter   String?
+  trailerUrl  String?
+
+  isFeatured  Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("SUPER_ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+model VickVersePost {
+  id          String   @id @default(cuid())
+
+  title       String
+  slug        String   @unique
+
+  description String
+  content     String
+
+  image       String
+  youtubeUrl  String?
+
+  category    String?
+  tags        String?
+
+  isFeatured  Boolean  @default(false)
+  status      String   @default("draft")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+model KnowledgePost {
+  id        String   @id @default(cuid())
+
+  title     String
+  slug      String   @unique
+
+  content   String
+
+  image     String?
+  tags      String?
+
+  status    String   @default("draft")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model WebsiteVisit {
+  id        String   @id @default(cuid())
+  path      String
+  createdAt DateTime @default(now())
+}
+model Page {
+  id          String   @id @default(cuid())
+
+  title       String
+  slug        String   @unique
+  content     String
+
+  image       String?
+
+  status      String   @default("draft")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

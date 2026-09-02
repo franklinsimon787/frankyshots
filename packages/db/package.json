@@ -1,0 +1,23 @@
+{
+  "name": "@frankyshots/db",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "build": "prisma format && prisma generate",
+    "lint": "prisma validate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "dotenv": "^17.4.2",
+    "prisma": "^6.19.3",
+    "tsx": "4.19.2"
+  }
+}
