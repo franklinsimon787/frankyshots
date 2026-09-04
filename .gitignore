@@ -17,3 +17,4 @@ prisma/dev.db-journal
 /generated/prisma
 dev.db
 dev.db-journal
+packages/db/generated/cloudflare/query_engine-windows.dll.node

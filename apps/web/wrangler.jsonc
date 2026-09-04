@@ -1,0 +1,35 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "web",
+	"compatibility_date": "2026-09-02",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"main": "vinext/server/fetch-handler",
+	"assets": {
+		"directory": "dist/client",
+		"not_found_handling": "none",
+		"binding": "ASSETS"
+	},
+	"cache": {
+		"enabled": true
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "VINEXT_KV_CACHE",
+			"id": "fcb760e4b41f477a8bffa07e300009e5",
+			"remote": true
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "frankyshots_db",
+			"database_name": "frankyshots-db",
+			"database_id": "fb31ebc7-ddb5-4085-baff-6ae0f8abc3c0",
+			"remote": true
+		}
+	]
+}

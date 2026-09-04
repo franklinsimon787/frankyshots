@@ -25,7 +25,8 @@
     "prisma": "6.19.3"
   },
   "devDependencies": {
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "typescript": "^5.9.3"
   },
   "allowScripts": {
     "@prisma/client@6.19.3": true,

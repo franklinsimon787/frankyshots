@@ -14,13 +14,19 @@
     "jsx": "preserve",
     "incremental": true,
     "plugins": [{ "name": "next" }],
-    "types": ["node"],
+    "types": ["node", "@cloudflare/workers-types"],
     "paths": {
-  "@/*": ["./src/*"],
-  "@frankyshots/shared": ["../../packages/shared/src"],
-  "@frankyshots/db": ["../../packages/db/index.ts"]
-}
+      "@/*": ["./src/*"],
+      "@frankyshots/shared": ["../../packages/shared/src"],
+      "@frankyshots/db": ["../../packages/db/index.ts"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "worker-configuration.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

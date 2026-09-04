@@ -1,5 +1,14 @@
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+generator cloudflare {
+  provider     = "prisma-client"
+  output       = "../generated/cloudflare"
+  runtime      = "workerd"
+  moduleFormat = "esm"
+  engineType   = "client"
 }
 
 datasource db {
@@ -28,12 +37,29 @@ model Species {
 
 model Project {
   id          String   @id @default(cuid())
+
   title       String
   category    String
   description String
   year        Int
   image       String
+
+  // Documentary specific
+  imdbUrl          String?
+  genre            String?
+  country          String?
+  languages        String?
+  releaseDate      String?
+  production       String?
+  director         String?
+  writer           String?
+  producer         String?
+  cinematography   String?
+  presenter        String?
+  trailerUrl       String?
+
   isFeatured  Boolean  @default(false)
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -100,5 +126,5 @@ model Page {
 model WebsiteVisit {
   id        String   @id @default(cuid())
   path      String
-  visitedAt DateTime @default(now())
+  createdAt DateTime @default(now())
 }
