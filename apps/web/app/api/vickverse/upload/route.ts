@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { env } from "cloudflare:workers";
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-
     const file = formData.get("file");
 
     if (!(file instanceof File)) {
@@ -60,47 +58,40 @@ export async function POST(request: Request) {
 
     const originalName = file.name || "image";
 
+    const lastDot = originalName.lastIndexOf(".");
     const extension =
-      path.extname(originalName).toLowerCase() || ".jpg";
+      lastDot >= 0
+        ? originalName.substring(lastDot).toLowerCase()
+        : ".jpg";
 
-    const safeName = `vickverse-${Date.now()}-${Math.random()
-      .toString(36)
-      .substring(2, 8)}${extension}`;
+    const safeName = `vickverse-${Date.now()}-${crypto
+      .randomUUID()
+      .replace(/-/g, "")
+      .substring(0, 8)}${extension}`;
 
-    // ---------------------------------------------
-    // UPLOAD DIRECTORY
-    // ---------------------------------------------
-
-    const uploadDirectory = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      "vickverse"
-    );
-
-    await mkdir(uploadDirectory, {
-      recursive: true,
-    });
+    const objectKey = `vickverse/${safeName}`;
 
     // ---------------------------------------------
     // CONVERT FILE TO BUFFER
     // ---------------------------------------------
 
     const arrayBuffer = await file.arrayBuffer();
-const bytes = new Uint8Array(arrayBuffer);
 
-const filePath = path.join(
-  uploadDirectory,
-  safeName
-);
+    // ---------------------------------------------
+    // UPLOAD TO CLOUDFLARE R2
+    // ---------------------------------------------
 
-await writeFile(filePath, bytes);
+    await env.FRANKYSHOTS_MEDIA.put(objectKey, arrayBuffer, {
+      httpMetadata: {
+        contentType: file.type,
+      },
+    });
 
     // ---------------------------------------------
     // PUBLIC IMAGE URL
     // ---------------------------------------------
 
-    const imageUrl = `/uploads/vickverse/${safeName}`;
+    const imageUrl = `/api/vickverse/media/${safeName}`;
 
     return NextResponse.json({
       success: true,
