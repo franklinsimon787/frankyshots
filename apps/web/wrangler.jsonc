@@ -31,5 +31,11 @@
 			"database_id": "fb31ebc7-ddb5-4085-baff-6ae0f8abc3c0",
 			"remote": true
 		}
-	]
+	],
+	"r2_buckets": [
+    {
+        "binding": "FRANKYSHOTS_MEDIA",
+        "bucket_name": "frankyshots-media"
+    }
+]
 }

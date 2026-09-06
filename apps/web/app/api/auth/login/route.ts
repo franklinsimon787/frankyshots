@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
-import { prisma } from "@frankyshots/db";
-
+import { prisma } from "../../../lib/prisma";
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as {
+  email?: string;
+  password?: string;
+};
 
     const email = String(body.email || "")
       .trim()
