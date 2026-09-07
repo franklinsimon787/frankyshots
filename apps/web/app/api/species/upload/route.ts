@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { mkdir, writeFile } from "fs/promises";
-import path from "path";
+import { env } from "cloudflare:workers";
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
-
     const file = formData.get("file");
 
     if (!(file instanceof File)) {
@@ -22,9 +20,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const data = new Uint8Array(bytes);
-
     const extension =
       file.name.split(".").pop()?.toLowerCase() || "jpg";
 
@@ -36,21 +31,17 @@ export async function POST(request: Request) {
         .replace(/^-+|-+$/g, "") || "species";
 
     const fileName = `${safeName}-${Date.now()}.${extension}`;
+    const objectKey = `species/${fileName}`;
 
-    const uploadDir = path.join(
-      process.cwd(),
-      "public",
-      "images",
-      "species"
-    );
+    const arrayBuffer = await file.arrayBuffer();
 
-    await mkdir(uploadDir, { recursive: true });
+    await env.FRANKYSHOTS_MEDIA.put(objectKey, arrayBuffer, {
+      httpMetadata: {
+        contentType: file.type,
+      },
+    });
 
-    const filePath = path.join(uploadDir, fileName);
-
-    await writeFile(filePath, data);
-
-    const imagePath = `/images/species/${fileName}`;
+    const imagePath = `/api/species/media/${fileName}`;
 
     return NextResponse.json(
       {
@@ -63,7 +54,12 @@ export async function POST(request: Request) {
     console.error("Image upload failed:", error);
 
     return NextResponse.json(
-      { error: "Failed to upload image." },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to upload image.",
+      },
       { status: 500 }
     );
   }

@@ -18,3 +18,7 @@ prisma/dev.db-journal
 dev.db
 dev.db-journal
 packages/db/generated/cloudflare/query_engine-windows.dll.node
+
+# Local database backups / exports
+*.backup
+prisma/*.sql
